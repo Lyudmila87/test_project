@@ -1,3 +1,4 @@
+from selenium.common import TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
 
 from .base_page import BasePage
@@ -20,3 +21,13 @@ class ProductPage(BasePage):
     def check_product_price(self):
         assert self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text == self.browser.find_element(
             *ProductPageLocators.ADDED_PRODUCT_PRICE).text, 'цена товара не соответствует'
+
+    def should_not_be_success_message(self):
+        """success-сообщения на странице быть не должно"""
+        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Cообщение присутствует, хотя не должно быть"
+
+    def should_be_disappear_success_message(self):
+        """success-сообщение должно исчезнуть после добавления в корзину"""
+        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Cообщение присутствует, хотя не должно быть"
