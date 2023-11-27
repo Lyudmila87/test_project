@@ -1,3 +1,5 @@
+from abc import ABC
+
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.common.exceptions import NoAlertPresentException
@@ -8,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from .locators import BasePageLocators, MainPageLocators
 
 
-class BasePage:
+class BasePage(ABC):
     """общие методы для работы с браузером"""
     def __init__(self, browser: WebDriver, url, timeout=10):
         self.browser = browser
@@ -72,3 +74,7 @@ class BasePage:
     def go_to_basket_page(self):
         basket_button = self.browser.find_element(*MainPageLocators.BUTTON_TO_GO_BASKET)
         basket_button.click()
+
+    def should_be_authorized_user(self):
+        assert self.is_element_present(*BasePageLocators.USER_ICON), \
+            "Иконка пользователя отсутсвует, возможно пользователь не залогинен"
