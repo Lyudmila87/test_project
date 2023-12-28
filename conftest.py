@@ -1,6 +1,10 @@
+import time
+
 from selenium.webdriver.chrome.options import Options
 import pytest
 from selenium import webdriver
+
+from pages.login_page import LoginPage
 
 
 def pytest_addoption(parser):
@@ -31,5 +35,14 @@ def browser(request):
     print("\nquit browser..")
     browser.quit()
 
+
+@pytest.fixture()
+def authorize_user(browser):
+    registration_page = LoginPage(browser)
+    registration_page.open_login_page()
+    email = str(time.time()) + "@fakemail.org"
+    password = 'ooatg0vooatg0v'
+    registration_page.register_new_user(email, password)
+    registration_page.should_be_authorized_user()
 
 
